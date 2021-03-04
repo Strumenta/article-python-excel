@@ -2,17 +2,19 @@ import unittest
 from typing import Tuple, Union
 
 import formulas
-from openpyxl import Workbook, load_workbook
+from openpyxl import load_workbook
 from openpyxl.cell import Cell
 
 
 class TestFormulas(unittest.TestCase):
     def test_data_only(self):
         wb = load_workbook('data/test_formulas.xlsx', data_only=True)
-        self.assertEqual(wb.active['A1'].value, 42)
-        self.assertEqual(wb.active['B1'].value, 21)
-        self.assertEqual(wb.active['C1'].value, 31.5)
-        wb.close()
+        try:
+            self.assertEqual(wb.active['A1'].value, 42)
+            self.assertEqual(wb.active['B1'].value, 21)
+            self.assertEqual(wb.active['C1'].value, 31.5)
+        finally:
+            wb.close()
 
     def test_calculate(self):
         xl_model = formulas.ExcelModel().loads('data/test_formulas.xlsx').finish()
